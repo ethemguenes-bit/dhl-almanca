@@ -9,9 +9,10 @@ Android'de Chrome ile açıp menüden **Uygulamayı yükle** seçin; ana ekrana 
 ## İçerik
 
 - **Ana sayfa:** ilerleme halkası, günlük seri, Anki kısayolu, cihaz kılavuzu, bölümler, günün cümlesi, telefona yükleme düğmesi
-- **Cümleler:** 165 numaralı cümle; her birinde Türkçe, Almanca, Türkçe okunuş, kelime açıklamaları ve varsa alternatif; arama, yıldızlama, gizleyip kendini sınama, normal ve yavaş seslendirme
+- **Cümleler:** 205 numaralı cümle; her birinde Türkçe, Almanca, Türkçe okunuş, kelime açıklamaları ve varsa alternatif; arama, yıldızlama, gizleyip kendini sınama, normal ve yavaş seslendirme
 - **Anki:** aralıklı tekrar (Tekrar / Zor / İyi / Kolay), günde yeni kart sınırı, yön ve deste seçimi
 - **Oyun (Paket Yarışı):** Almanca→Türkçe ve Türkçe→Almanca sorular, 3 can, süre, seri çarpanı, rekor
+- **Sabah toplantısı:** şefin bilgilendirmesinden 30 cümle (güvenlik, bölge değişiklikleri, kurallar, dağıtım, trafik, kalite, yoğun dönem) ve toplantıda sorulacak 10 soru; dinleme modu (konuşmayı dinle, "Şef ne dedi?" sorularını cevapla) ve tarihli toplantı notları (kopyala / paylaş)
 - **Cihaz kullanımı:** Zebra el terminali kılavuzu, numaralı kayıtlar (001: Müşteri evde yok – Benachrichtigung)
 - **Alıştırmalar:** Kartlar, Doğruyu seç, Dinle ve anla, Cümle kur
 - **Kelimeler**, **Kalıplar**, **Ekle** (kendi cümlelerin, toplu ekleme, yedek)
