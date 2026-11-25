@@ -338,6 +338,8 @@ const CATS = [
   ['telefon', 'Telefonda', '📞'],
   ['sohbet', 'Kısa sohbet ve nezaket', '😊'],
   ['cihaz', 'Cihaz ve tarayıcı sorunları', '📟'],
+  ['acil', 'Acil durum ve kaza', '🚨'],
+  ['zaman', 'Saat ve zaman', '🕐'],
   ['mine', 'Benim cümlelerim', '✏️'],
 ];
 // [no, kategori, Türkçe, Almanca, okunuş, notlar [[de, tr]...], alternatif [de, tr]]
@@ -477,6 +479,36 @@ const BASE = [
   [133, 'depo', 'Bu kafes dolu.', 'Dieser Rollcontainer ist voll.', 'Diiza rolkonteena ist fol.', [['der Rollcontainer', 'tekerlekli kafes']]],
   [134, 'depo', 'Paketleri sıraya göre yüklüyorum.', 'Ich lade die Pakete nach der Reihenfolge.', 'İh laade dii pakete naah dea rayenfolge.', [['die Reihenfolge', 'sıra'], ['nach', '… göre']]],
   [135, 'depo', 'Yarın sabah saat kaçta başlıyoruz?', 'Um wie viel Uhr fangen wir morgen an?', 'Um vii fiil uua fangın viia morgın an?', [['um wie viel Uhr', 'saat kaçta'], ['anfangen', 'başlamak']]],
+  [136, 'acil', 'Yardım edin!', 'Hilfe!', 'Hilfe!', [['die Hilfe', 'yardım']], ['Können Sie mir bitte helfen?', 'Bana yardım edebilir misiniz?']],
+  [137, 'acil', 'Lütfen ambulans çağırın.', 'Bitte rufen Sie einen Krankenwagen.', 'Bite ruufın zii aynen krankenvaagın.', [['der Krankenwagen', 'ambulans'], ['112', 'ambulans ve itfaiye numarası']]],
+  [138, 'acil', 'Yaralandım.', 'Ich habe mich verletzt.', 'İh habe mih ferletst.', [['sich verletzen', 'yaralanmak']]],
+  [139, 'acil', 'Köpek beni ısırdı.', 'Der Hund hat mich gebissen.', 'Dea hunt hat mih gebisın.', [['beißen', 'ısırmak']]],
+  [140, 'acil', 'Merdivende düştüm.', 'Ich bin auf der Treppe gestürzt.', 'İh bin auf dea trepe geştürtst.', [['stürzen', 'düşmek']]],
+  [141, 'acil', 'Elimi kestim.', 'Ich habe mich an der Hand geschnitten.', 'İh habe mih an dea hant geşnitın.', [['die Hand', 'el'], ['schneiden', 'kesmek']]],
+  [142, 'acil', 'Arabamın camı kırıldı.', 'Die Scheibe von meinem Auto ist kaputt.', 'Dii şaybe fon maynem auto ist kaput.', [['die Scheibe', 'cam'], ['kaputt', 'kırık, bozuk']]],
+  [143, 'acil', 'Polisi aramam gerekiyor.', 'Ich muss die Polizei rufen.', 'İh mus dii politsay ruufın.', [['die Polizei', 'polis'], ['110', 'polis numarası']]],
+  [144, 'zaman', 'Saat kaç?', 'Wie spät ist es?', 'Vii şpeet ist es?', [['spät', 'geç']], ['Wie viel Uhr ist es?', 'Saat kaç?']],
+  [145, 'zaman', 'Saat on bir buçuk.', 'Es ist halb zwölf.', 'Es ist halp tsvölf.', [['halb zwölf', '11:30 (on ikiye yarım saat var)'], ['Viertel nach elf', '11:15']]],
+  [146, 'zaman', 'Öğlene kadar evde misiniz?', 'Sind Sie bis Mittag zu Hause?', 'Zint zii bis mitaak tsu hauze?', [['bis Mittag', 'öğlene kadar']]],
+  [147, 'zaman', 'Bir saat sonra tekrar geliyorum.', 'Ich komme in einer Stunde wieder.', 'İh kome in ayna ştunde viida.', [['in einer Stunde', 'bir saat sonra'], ['wieder', 'tekrar']]],
+  [148, 'zaman', 'Öğleden sonra evde misiniz?', 'Sind Sie am Nachmittag zu Hause?', 'Zint zii am naahmitaak tsu hauze?', [['der Nachmittag', 'öğleden sonra'], ['der Vormittag', 'öğleden önce']]],
+  [149, 'zaman', '10 dakika geç kaldım.', 'Ich bin zehn Minuten zu spät.', 'İh bin tseen minuutın tsu şpeet.', [['zu spät', 'geç (kalmış)']]],
+  [150, 'zaman', 'Öğle molası saat kaçta?', 'Wann ist die Mittagspause?', 'Van ist dii mitaakspauze?', [['die Mittagspause', 'öğle molası']]],
+  [151, 'musteri', 'Lütfen biraz bekleyin.', 'Bitte warten Sie einen Moment.', 'Bite vartın zii aynen moment.', [['warten', 'beklemek']]],
+  [152, 'musteri', 'Paketiniz çok ağır, dikkatli olun.', 'Ihr Paket ist sehr schwer, seien Sie vorsichtig.', 'İia paket ist zeea şveea, zayen zii foazihtih.', [['vorsichtig', 'dikkatli']]],
+  [153, 'musteri', 'Paketi kime vereyim?', 'Wem soll ich das Paket geben?', 'Veem zol ih das paket geebın?', [['wem', 'kime'], ['geben', 'vermek']]],
+  [154, 'musteri', 'Komşunuzun adı ne?', 'Wie heißt Ihr Nachbar?', 'Vii hayst iia nahbaa?', [['heißen', 'adı … olmak']]],
+  [155, 'musteri', 'Paketi bahçeye bırakabilir miyim?', 'Darf ich das Paket in den Garten legen?', 'Darf ih das paket in deen gartın leegın?', [['der Garten', 'bahçe']]],
+  [156, 'adres', 'Bu adreste bir firma var mı?', 'Gibt es an dieser Adresse eine Firma?', 'Gipt es an diiza adrese ayne firma?', [['an dieser Adresse', 'bu adreste']]],
+  [157, 'adres', 'Posta kutusu kırık.', 'Der Briefkasten ist kaputt.', 'Dea briifkastın ist kaput.', [['kaputt', 'kırık, bozuk']]],
+  [158, 'adres', 'Bina kapısı açık.', 'Die Haustür ist offen.', 'Dii haustüa ist ofın.', [['die Haustür', 'bina (ev) kapısı'], ['offen', 'açık']]],
+  [159, 'adres', 'Burada park etmek yasak.', 'Hier ist Parken verboten.', 'Hiia ist parkın ferbootın.', [['verboten', 'yasak'], ['parken', 'park etmek']]],
+  [160, 'mesai', 'Bugün izinliyim.', 'Ich habe heute frei.', 'İh habe hoyte fray.', [['frei haben', 'izinli olmak']]],
+  [161, 'ekip', 'Yardımın için teşekkürler.', 'Danke für deine Hilfe.', 'Danke für dayne hilfe.', [['deine', 'senin']]],
+  [162, 'ekip', 'Yarın benim yerime kim bakıyor?', 'Wer vertritt mich morgen?', 'Vea fertrit mih morgın?', [['vertreten', 'birinin yerine bakmak']]],
+  [163, 'depo', 'Bu paket hasarlı gelmiş.', 'Dieses Paket ist beschädigt angekommen.', 'Diizes paket ist beşeedigt angekomın.', [['ankommen', 'gelmek, varmak'], ['beschädigt', 'hasarlı']]],
+  [164, 'depo', 'Paketleri bölgeye göre ayırıyorum.', 'Ich sortiere die Pakete nach Bezirk.', 'İh zortiire dii pakete naah betsirk.', [['nach Bezirk', 'bölgeye göre']]],
+  [165, 'depo', 'Yükleme bitti, yola çıkıyorum.', 'Ich bin fertig mit dem Laden und fahre los.', 'İh bin fertih mit deem laadın unt faare loos.', [['losfahren', 'yola çıkmak'], ['das Laden', 'yükleme']]],
 ];
 
 const WORDS = [
@@ -513,6 +545,11 @@ const WORDS = [
   ['der Türcode', 'kapı kodu', 'dea tüürkood'], ['das Hinterhaus', 'arka bina', 'das hintahaus'], ['der Schlüssel', 'anahtar', 'dea şlüsel'],
   ['die Reihenfolge', 'sıra', 'dii rayenfolge'], ['anfangen', 'başlamak', 'anfangın'], ['heiß', 'sıcak', 'hays'],
   ['kalt', 'soğuk', 'kalt'], ['eilig', 'acele', 'aylih'], ['nett', 'nazik', 'net'], ['die Garage', 'garaj', 'dii garaaje'],
+  ['der Krankenwagen', 'ambulans', 'dea krankenvaagın'], ['die Polizei', 'polis', 'dii politsay'], ['sich verletzen', 'yaralanmak', 'zih ferletsın'],
+  ['beißen', 'ısırmak', 'baysın'], ['stürzen', 'düşmek', 'ştürtsın'], ['die Scheibe', 'cam', 'dii şaybe'],
+  ['spät', 'geç', 'şpeet'], ['der Nachmittag', 'öğleden sonra', 'dea naahmitaak'], ['warten', 'beklemek', 'vartın'],
+  ['vorsichtig', 'dikkatli', 'foazihtih'], ['der Garten', 'bahçe', 'dea gartın'], ['offen', 'açık', 'ofın'],
+  ['verboten', 'yasak', 'ferbootın'], ['vertreten', 'yerine bakmak', 'fertreetın'], ['losfahren', 'yola çıkmak', 'loosfaarın'],
 ];
 
 const PATTERNS = [

@@ -1,6 +1,6 @@
 // DHL Almancası service worker: yalnızca dhl/ klasörünü yönetir, ilk açılıştan sonra internetsiz çalışır.
 // Dosyalar değişince VERSION değerini artırın; telefonlar yeni sürümü bir sonraki açılışta alır.
-const VERSION = 'dhl-v6';
+const VERSION = 'dhl-v7';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
