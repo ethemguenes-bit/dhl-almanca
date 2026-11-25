@@ -305,6 +305,18 @@ button.logo{border:0;cursor:pointer}
 .zbtm{text-align:center;color:#8a929c;font-size:11px;font-weight:800;letter-spacing:.3em;margin-top:8px}
 .opt-card.main{border:2px solid var(--ok)}
 .when{margin-top:8px;font-size:14.5px;font-weight:600}
+
+/* Sabah toplantısı */
+.meetcard{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:18px;padding:14px;box-shadow:var(--shadow);margin-top:12px;display:flex;flex-direction:column;gap:10px}
+.meetcard .mh{display:flex;align-items:center;gap:12px}
+.meetcard .ce{font-size:26px;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:var(--accent-bg);flex:none}
+.meetcard b{display:block;font-size:17px}.meetcard small{color:var(--soft);font-size:13.5px}
+.meetcard .btn{padding:11px}
+.quiz.meet{align-items:stretch;text-align:center}
+.speaker{font-size:84px;line-height:1;margin:10px auto 0;animation:talk 1.2s ease-in-out infinite}
+@keyframes talk{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@media (prefers-reduced-motion: reduce){.speaker{animation:none}}
+.mprog{font-weight:700;font-size:17px}
 </style>
 </head>
 <body>
@@ -340,6 +352,8 @@ const CATS = [
   ['cihaz', 'Cihaz ve tarayıcı sorunları', '📟'],
   ['acil', 'Acil durum ve kaza', '🚨'],
   ['zaman', 'Saat ve zaman', '🕐'],
+  ['brief', 'Sabah bilgilendirmesi (şef)', '📢'],
+  ['soru', 'Toplantıda sorularım', '🙋'],
   ['mine', 'Benim cümlelerim', '✏️'],
 ];
 // [no, kategori, Türkçe, Almanca, okunuş, notlar [[de, tr]...], alternatif [de, tr]]
@@ -509,6 +523,46 @@ const BASE = [
   [163, 'depo', 'Bu paket hasarlı gelmiş.', 'Dieses Paket ist beschädigt angekommen.', 'Diizes paket ist beşeedigt angekomın.', [['ankommen', 'gelmek, varmak'], ['beschädigt', 'hasarlı']]],
   [164, 'depo', 'Paketleri bölgeye göre ayırıyorum.', 'Ich sortiere die Pakete nach Bezirk.', 'İh zortiire dii pakete naah betsirk.', [['nach Bezirk', 'bölgeye göre']]],
   [165, 'depo', 'Yükleme bitti, yola çıkıyorum.', 'Ich bin fertig mit dem Laden und fahre los.', 'İh bin fertih mit deem laadın unt faare loos.', [['losfahren', 'yola çıkmak'], ['das Laden', 'yükleme']]],
+  [166, 'brief', 'Mektup dağıtırken motor her zaman kapalı olmalı.', 'Beim Briefeverteilen muss der Motor immer aus sein.', 'Baym briifeferteylın mus dea mootoa imma aus zayn.', [['das Briefeverteilen', 'mektup dağıtma'], ['aus sein', 'kapalı olmak']]],
+  [167, 'brief', 'Kısa süreliğine ayrılsanız bile anahtarı her zaman çıkarın.', 'Zieht immer den Schlüssel ab, auch wenn ihr nur kurz weg seid.', 'Tsiit imma deen şlüsel ap, auh ven iia nua kurts vek zayt.', [['den Schlüssel abziehen', 'anahtarı çıkarmak'], ['kurz weg sein', 'kısa süre uzakta olmak']]],
+  [168, 'brief', 'Aracı her zaman kilitleyin.', 'Schließt das Fahrzeug immer ab.', 'Şliist das faartsoyk imma ap.', [['das Fahrzeug', 'araç'], ['abschließen', 'kilitlemek']]],
+  [169, 'brief', 'Reflektörlü yeleğinizi her zaman giyin.', 'Tragt immer eure Warnweste.', 'Traakt imma oyre varnveste.', [['die Warnweste', 'reflektörlü yelek'], ['tragen', 'giymek, taşımak']]],
+  [170, 'brief', 'Geri giderken dikkatli olun.', 'Fahrt vorsichtig rückwärts.', 'Faart foazihtih rükverts.', [['rückwärts fahren', 'geri geri gitmek'], ['vorsichtig', 'dikkatli']]],
+  [171, 'brief', 'Kısa mesafelerde bile emniyet kemerini takın.', 'Schnallt euch an, auch bei kurzen Strecken.', 'Şnalt oyh an, auh bay kurtsın ştrekın.', [['sich anschnallen', 'kemer takmak'], ['die Strecke', 'mesafe, yol']]],
+  [172, 'brief', 'Pazartesiden itibaren bölgeler değişiyor.', 'Ab Montag ändern sich die Bezirke.', 'Ap moontaak endern zih dii betsirke.', [['ab Montag', 'pazartesiden itibaren'], ['sich ändern', 'değişmek']]],
+  [173, 'brief', 'Yeni bölge planı panoda asılı.', 'Der neue Bezirksplan hängt am Brett.', 'Dea noye betsirksplaan hengt am bret.', [['der Bezirksplan', 'bölge planı'], ['das Brett', 'pano']]],
+  [174, 'brief', 'Bir arkadaş hasta, onun bölgesini paylaşmamız gerekiyor.', 'Ein Kollege ist krank, wir müssen seinen Bezirk aufteilen.', 'Ayn kolleege ist krank, viia müsın zaynen betsirk auftaylın.', [['der Kollege', 'iş arkadaşı'], ['aufteilen', 'paylaştırmak']]],
+  [175, 'brief', 'Bugün ek olarak birkaç sokak alıyorsunuz.', 'Ihr bekommt heute zusätzlich ein paar Straßen.', 'İia bekomt hoyte tsuuzetslih ayn paa ştraasın.', [['zusätzlich', 'ek olarak'], ['ein paar', 'birkaç']]],
+  [176, 'brief', 'Hauptstraße bundan sonra 5. bölgeye ait.', 'Die Hauptstraße gehört ab jetzt zu Bezirk 5.', 'Dii hauptştraase gehört ap yetst tsu betsirk fünf.', [['ab jetzt', 'bundan sonra'], ['gehören zu', 'ait olmak']]],
+  [177, 'brief', 'Gelecek haftadan itibaren yeni bir kural var.', 'Ab nächster Woche gibt es eine neue Regel.', 'Ap neehsta vohe gipt es ayne noye reegel.', [['die Regel', 'kural'], ['nächste Woche', 'gelecek hafta']]],
+  [178, 'brief', 'Bu, hemen bugünden itibaren zorunlu.', 'Das ist ab sofort Pflicht.', 'Das ist ap zofort pfliht.', [['ab sofort', 'hemen, derhal'], ['die Pflicht', 'zorunluluk, görev']]],
+  [179, 'brief', 'Lütfen yeni talimatı okuyun ve imzalayın.', 'Bitte lest die neue Anweisung durch und unterschreibt sie.', 'Bite leest dii noye anvayzung durh unt unterşraypt zii.', [['die Anweisung', 'talimat'], ['durchlesen', 'baştan sona okumak']]],
+  [180, 'brief', 'Bırakma izinleri artık tarayıcıda görünüyor.', 'Die Abstellgenehmigungen werden jetzt im Scanner angezeigt.', 'Dii apştelgeneemigungen veerdın yetst im skena angetsaygt.', [['anzeigen', 'göstermek'], ['die Abstellgenehmigung', 'bırakma izni']]],
+  [181, 'brief', 'Her paket taranmalı.', 'Jedes Paket muss gescannt werden.', 'Yeedes paket mus geskent veerdın.', [['jedes', 'her'], ['muss … werden', '… edilmeli']]],
+  [182, 'brief', 'Paketi bıraktığınızda her zaman fotoğraf çekin.', 'Macht bei der Ablage immer ein Foto.', 'Maht bay dea aplaage imma ayn footo.', [['die Ablage', 'bırakma (paketi bir yere)'], ['ein Foto machen', 'fotoğraf çekmek']]],
+  [183, 'brief', 'Önce zili çalmadan bildirim kartı atmayın.', 'Werft keine Benachrichtigungskarte ein, ohne vorher zu klingeln.', 'Veaft kayne benahrihtigungskarte ayn, oone foaheer tsu klingeln.', [['einwerfen', '(posta kutusuna) atmak'], ['ohne vorher zu …', 'önce … yapmadan']]],
+  [184, 'brief', 'Taahhütlü mektuplar posta kutusuna atılmaz.', 'Einschreiben dürfen nicht in den Briefkasten.', 'Aynşraybın dürfın niht in deen briifkastın.', [['das Einschreiben', 'taahhütlü mektup'], ['dürfen nicht', '… yapılamaz, yasak']]],
+  [185, 'brief', 'Teslim edilemeyen bütün paketleri saat 17\'ye kadar geri getirin.', 'Bringt alle Rückläufer bis 17 Uhr zurück.', 'Bringt ale rüklöyfa bis ziibtseen uua tsurük.', [['der Rückläufer', 'geri dönen paket'], ['bis 17 Uhr', 'saat 17\'ye kadar']]],
+  [186, 'brief', 'Yarın yollar kaygan olacak, yavaş sürün.', 'Morgen wird es glatt, fahrt langsam.', 'Morgın virt es glat, faart langzaam.', [['glatt', 'kaygan'], ['langsam', 'yavaş']]],
+  [187, 'brief', 'Köprü yol çalışması nedeniyle kapalı.', 'Die Brücke ist wegen Bauarbeiten gesperrt.', 'Dii brüke ist veegın bauarbaytın geşpeert.', [['die Brücke', 'köprü'], ['die Bauarbeiten', 'yol (inşaat) çalışması']]],
+  [188, 'brief', 'Her kazayı hemen bildirin, küçük hasarları bile.', 'Meldet jeden Unfall sofort, auch kleine Schäden.', 'Meeldet yeedın unfal zofort, auh klayne şeedın.', [['melden', 'bildirmek'], ['der Schaden', 'hasar']]],
+  [189, 'brief', 'Dün bir şikâyet aldık.', 'Wir hatten gestern eine Beschwerde.', 'Viia hatın gestean ayne beşveerde.', [['die Beschwerde', 'şikâyet'], ['gestern', 'dün']]],
+  [190, 'brief', 'Bir müşteri paketini almamış.', 'Ein Kunde hat sein Paket nicht bekommen.', 'Ayn kunde hat zayn paket niht bekomın.', [['der Kunde', 'müşteri'], ['bekommen', 'almak, teslim almak']]],
+  [191, 'brief', 'Teslim oranı daha iyi olmalı.', 'Die Zustellquote muss besser werden.', 'Dii tsuuştelkvoote mus besa veerdın.', [['die Zustellquote', 'teslim oranı'], ['besser werden', 'daha iyi olmak']]],
+  [192, 'brief', 'İyi iş çıkardınız, teşekkürler!', 'Ihr habt gute Arbeit gemacht, danke!', 'İia hapt guute arbayt gemaht, danke!', [['gute Arbeit', 'iyi iş']]],
+  [193, 'brief', 'Noel\'den önce çok fazla paketimiz olur.', 'Vor Weihnachten haben wir sehr viele Pakete.', 'Foa vaynahtın haabın viia zeea fiile pakete.', [['Weihnachten', 'Noel'], ['vor', 'önce']]],
+  [194, 'brief', 'Cumartesi fazla mesai yapacak insanlara ihtiyacımız var.', 'Am Samstag brauchen wir Leute für Überstunden.', 'Am zamstaak brauhın viia loyte für üüberştundın.', [['die Leute', 'insanlar'], ['die Überstunden', 'fazla mesai']]],
+  [195, 'brief', 'İzin günlerinizi ay sonuna kadar listeye yazın.', 'Tragt euren Urlaub bis Ende des Monats ein.', 'Traakt oyrın uurlaup bis ende des moonats ayn.', [['der Urlaub', 'yıllık izin'], ['eintragen', 'listeye yazmak']]],
+  [196, 'soru', 'Bir sorum var.', 'Ich habe eine Frage.', 'İh habe ayne fraage.', [['die Frage', 'soru']]],
+  [197, 'soru', 'Doğru anladım mı?', 'Habe ich das richtig verstanden?', 'Habe ih das rihtih ferştandın?', [['richtig', 'doğru'], ['verstehen', 'anlamak']]],
+  [198, 'soru', 'Lütfen bir kez daha açıklar mısınız?', 'Können Sie das bitte noch einmal erklären?', 'Könın zii das bite noh aynmaal erkleerın?', [['erklären', 'açıklamak'], ['noch einmal', 'bir kez daha']]],
+  [199, 'soru', 'Lütfen daha yavaş konuşur musunuz?', 'Können Sie bitte langsamer sprechen?', 'Könın zii bite langzaama şprehın?', [['langsamer', 'daha yavaş'], ['sprechen', 'konuşmak']]],
+  [200, 'soru', 'Bu kelime ne demek?', 'Was bedeutet dieses Wort?', 'Vas bedoytet diizes vort?', [['bedeuten', 'anlamına gelmek'], ['das Wort', 'kelime']]],
+  [201, 'soru', 'Bu ne zamandan itibaren geçerli?', 'Ab wann gilt das?', 'Ap van gilt das?', [['ab wann', 'ne zamandan itibaren'], ['gelten', 'geçerli olmak']]],
+  [202, 'soru', 'Bu benim için de geçerli mi?', 'Gilt das auch für mich?', 'Gilt das auh für mih?', [['auch für mich', 'benim için de']]],
+  [203, 'soru', 'Pazartesiden itibaren hangi bölge benim?', 'Welcher Bezirk ist ab Montag meiner?', 'Velha betsirk ist ap moontaak mayna?', [['meiner', 'benimki']]],
+  [204, 'soru', 'Yeni talimatı nerede bulabilirim?', 'Wo finde ich die neue Anweisung?', 'Vo finde ih dii noye anvayzung?', [['die Anweisung', 'talimat']]],
+  [205, 'soru', 'Bir şey imzalamam gerekiyor mu?', 'Muss ich etwas unterschreiben?', 'Mus ih etvas unterşraybın?', [['etwas', 'bir şey'], ['unterschreiben', 'imzalamak']]],
 ];
 
 const WORDS = [
@@ -550,6 +604,12 @@ const WORDS = [
   ['spät', 'geç', 'şpeet'], ['der Nachmittag', 'öğleden sonra', 'dea naahmitaak'], ['warten', 'beklemek', 'vartın'],
   ['vorsichtig', 'dikkatli', 'foazihtih'], ['der Garten', 'bahçe', 'dea gartın'], ['offen', 'açık', 'ofın'],
   ['verboten', 'yasak', 'ferbootın'], ['vertreten', 'yerine bakmak', 'fertreetın'], ['losfahren', 'yola çıkmak', 'loosfaarın'],
+  ['das Fahrzeug', 'araç', 'das faartsoyk'], ['abschließen', 'kilitlemek', 'apşliisın'], ['die Warnweste', 'reflektörlü yelek', 'dii varnveste'],
+  ['sich anschnallen', 'kemer takmak', 'zih anşnalın'], ['der Bezirksplan', 'bölge planı', 'dea betsirksplaan'], ['aufteilen', 'paylaştırmak', 'auftaylın'],
+  ['die Regel', 'kural', 'dii reegel'], ['ab sofort', 'hemen, derhal', 'ap zofort'], ['die Pflicht', 'zorunluluk', 'dii pfliht'],
+  ['die Anweisung', 'talimat', 'dii anvayzung'], ['melden', 'bildirmek', 'meeldın'], ['der Schaden', 'hasar', 'dea şaadın'],
+  ['die Beschwerde', 'şikâyet', 'dii beşveerde'], ['die Zustellquote', 'teslim oranı', 'dii tsuuştelkvoote'], ['der Urlaub', 'yıllık izin', 'dea uurlaup'],
+  ['gelten', 'geçerli olmak', 'geltın'], ['erklären', 'açıklamak', 'erkleerın'], ['bedeuten', 'anlamına gelmek', 'bedoytın'],
 ];
 
 const PATTERNS = [
@@ -1027,6 +1087,126 @@ function viewDevice() {
     <div class="wl">${g.words.map(([d, t, o]) => `<div class="wi"><div class="t"><div class="d" lang="de">${esc(d)}</div><div class="m">${esc(t)}</div><div class="o">${esc(o)}</div></div><button class="ib" data-say="${esc(d)}" aria-label="Dinle">🔊</button></div>`).join('')}</div>`;
 }
 
+// ---------- Sabah toplantısı: dinleme modu ----------
+const BRIEF_TOPICS = [['guv', 'Güvenlik', '🦺'], ['bez', 'Bölge değişiklikleri', '🗺️'], ['kural', 'Yeni kurallar', '📋'], ['dag', 'Dağıtım ve tarama', '📦'], ['trafik', 'Trafik ve hava', '🌧️'], ['kalite', 'Şikâyet ve kalite', '⭐'], ['yogun', 'Yoğun dönem ve izin', '🎄']];
+// No: [konu, soru, doğru cevap, yanlış 1, yanlış 2]
+const BRIEF_Q = {
+  166: ['guv', 'Mektup dağıtırken ne yapmalısın?', 'Motoru kapatmalıyım', 'Emniyet kemeri takmalıyım', 'Fotoğraf çekmeliyim'],
+  167: ['guv', 'Araçtan kısa süreliğine ayrılırken ne yapmalısın?', 'Anahtarı çıkarmalıyım', 'Motoru çalışır bırakabilirim', 'Kapıyı açık bırakmalıyım'],
+  168: ['guv', 'Araçla ilgili ne söylendi?', 'Her zaman kilitlenmeli', 'Her gün yıkanmalı', 'Deposu hep dolu olmalı'],
+  169: ['guv', 'Ne giymelisiniz?', 'Reflektörlü yelek', 'Eldiven', 'Kask'],
+  170: ['guv', 'Hangi durumda dikkatli olmalısınız?', 'Geri giderken', 'Paket taşırken', 'Park ederken'],
+  171: ['guv', 'Emniyet kemeri ne zaman takılmalı?', 'Kısa mesafelerde bile', 'Sadece otobanda', 'Sadece gece'],
+  172: ['bez', 'Ne değişiyor?', 'Pazartesiden itibaren bölgeler', 'Yarından itibaren çalışma saatleri', 'Bugün araçlar'],
+  173: ['bez', 'Yeni bölge planı nerede?', 'Panoda asılı', 'Tarayıcıda', 'E-postada'],
+  174: ['bez', 'Bir bölge neden paylaştırılıyor?', 'Bir arkadaş hasta', 'Bölge çok büyük', 'Bir araç bozuk'],
+  175: ['bez', 'Bugün ne oluyor?', 'Ek olarak birkaç sokak alıyoruz', 'Erken bitiriyoruz', 'Bölgemiz küçülüyor'],
+  176: ['bez', 'Hauptstraße ile ilgili ne söylendi?', 'Artık 5. bölgeye ait', 'Yol kapalı', 'Yeni açıldı'],
+  177: ['kural', 'Gelecek hafta ne var?', 'Yeni bir kural', 'Tatil', 'Yeni araçlar'],
+  178: ['kural', 'Bu kural ne zamandan itibaren zorunlu?', 'Hemen, bugünden itibaren', 'Gelecek aydan itibaren', 'Yılbaşından itibaren'],
+  179: ['kural', 'Yeni talimatla ne yapmalısınız?', 'Okuyup imzalamalıyız', 'Müşteriye vermeliyiz', 'Panoya asmalıyız'],
+  180: ['kural', 'Bırakma izinleri artık nerede görünüyor?', 'Tarayıcıda', 'Panoda', 'Posta kutusunda'],
+  181: ['dag', 'Ne taranmalı?', 'Her paket', 'Sadece büyük paketler', 'Sadece taahhütlü mektuplar'],
+  182: ['dag', 'Paketi bırakınca ne yapmalısın?', 'Fotoğraf çekmeliyim', 'Şefi aramalıyım', 'Komşuya haber vermeliyim'],
+  183: ['dag', 'Bildirim kartı atmadan önce ne yapmalısın?', 'Zili çalmalıyım', 'Fotoğraf çekmeliyim', 'Şefi aramalıyım'],
+  184: ['dag', 'Taahhütlü mektuplar için ne söylendi?', 'Posta kutusuna atılmaz', 'Kapıya bırakılır', 'Komşuya verilir'],
+  185: ['dag', 'Geri dönen paketler ne zamana kadar getirilmeli?', 'Saat 17\'ye kadar', 'Saat 12\'ye kadar', 'Yarın sabaha kadar'],
+  186: ['trafik', 'Yarın için ne uyarısı var?', 'Yollar kaygan, yavaş sürün', 'Çok sıcak olacak', 'Trafik olmayacak'],
+  187: ['trafik', 'Köprü neden kapalı?', 'Yol çalışması var', 'Kaza oldu', 'Sel var'],
+  188: ['trafik', 'Kazalarla ilgili ne söylendi?', 'Küçük hasar bile hemen bildirilmeli', 'Sadece büyük kazalar bildirilmeli', 'Akşam bildirilmeli'],
+  189: ['kalite', 'Dün ne oldu?', 'Bir şikâyet geldi', 'Bir kaza oldu', 'Yeni bir arkadaş başladı'],
+  190: ['kalite', 'Müşterinin sorunu ne?', 'Paketini almamış', 'Paketi hasarlı gelmiş', 'Adresi yanlış'],
+  191: ['kalite', 'Ne daha iyi olmalı?', 'Teslim oranı', 'Araçların temizliği', 'Mola saatleri'],
+  192: ['kalite', 'Şef ne dedi?', 'İyi iş çıkardınız, teşekkürler', 'Daha hızlı çalışın', 'Yarın toplantı yok'],
+  193: ['yogun', 'Noel\'den önce ne olur?', 'Çok fazla paket olur', 'Çok az paket olur', 'Herkes izin yapar'],
+  194: ['yogun', 'Cumartesi ne lazım?', 'Fazla mesai yapacak insanlar', 'Yeni araçlar', 'Daha az personel'],
+  195: ['yogun', 'İzinlerle ilgili ne söylendi?', 'Ay sonuna kadar listeye yazılmalı', 'Bu ay izin yok', 'Yarına kadar söylenmeli']
+};
+let M = null; // { items, stage: 'listen'|'quiz'|'done', i, right, picked, opts, speaking }
+P.meet = Object.assign({ topic: 'mix', slow: false }, P.meet || {});
+function meetStart() {
+  const S = all().filter(s => BRIEF_Q[s.n]);
+  let items;
+  if (P.meet.topic === 'mix') { const byT = BRIEF_TOPICS.map(([k]) => shuffle(S.filter(s => BRIEF_Q[s.n][0] === k))); items = shuffle(byT).slice(0, 5).map(a => a[0]); }
+  else items = shuffle(S.filter(s => BRIEF_Q[s.n][0] === P.meet.topic)).slice(0, 5);
+  M = { items, stage: 'listen', i: 0, right: 0, wrong: [], speaking: -1 };
+  render(); scrollTo(0, 0); meetPlay();
+}
+function meetPlay() {
+  if (!synth) { toast('Bu tarayıcı seslendirmeyi desteklemiyor.'); return; }
+  synth.cancel();
+  const parts = ['Guten Morgen zusammen!', ...M.items.map(s => s.de), 'Das war\'s. Gute Fahrt!'];
+  parts.forEach((t, k) => {
+    const u = new SpeechSynthesisUtterance(t); u.lang = 'de-DE'; if (deVoice) u.voice = deVoice; u.rate = P.meet.slow ? 0.65 : 0.92;
+    u.onstart = () => { if (M) { M.speaking = k; const el = $('#mprog'); if (el) el.textContent = k === 0 ? 'Şef selam veriyor…' : k > M.items.length ? 'Şef bitiriyor…' : `Şef konuşuyor… ${k} / ${M.items.length}`; } };
+    u.onend = () => { if (M && k === parts.length - 1) { M.speaking = -2; const el = $('#mprog'); if (el) el.textContent = 'Konuşma bitti. Sorulara geçebilirsin.'; } };
+    synth.speak(u);
+  });
+}
+function meetQuiz() { synth && synth.cancel(); M.stage = 'quiz'; M.i = 0; meetLoadQ(); render(); scrollTo(0, 0); }
+function meetLoadQ() { const q = BRIEF_Q[M.items[M.i].n]; M.picked = null; M.opts = shuffle([q[2], q[3], q[4]]); }
+function viewMeet() {
+  if (!M) {
+    const opts = [['mix', '🔀 Karışık (her konudan)'], ...BRIEF_TOPICS.map(([k, n, e]) => [k, e + ' ' + n])].map(([k, n]) => `<option value="${k}" ${P.meet.topic === k ? 'selected' : ''}>${esc(n)}</option>`).join('');
+    return `<section class="ghero"><div class="e">📢</div><h2>Sabah toplantısı</h2>
+        <p>Şef kısa bir bilgilendirme yapıyor. Ekrana bakmadan <b>dinle</b>, sonra "Şef ne dedi?" sorularını cevapla.</p>
+        <button class="btn big" data-mstart>🎧 Toplantıyı başlat</button></section>
+      <h2 class="sec">Ayarlar</h2>
+      <div class="form">
+        <label>Konu<select class="sel" id="mtopic">${opts}</select></label>
+        <label>Konuşma hızı<div class="seg"><button type="button" data-mslow="0" aria-pressed="${!P.meet.slow}">Normal</button><button type="button" data-mslow="1" aria-pressed="${P.meet.slow}">🐢 Yavaş</button></div></label>
+      </div>
+      <button class="cta" data-tab="notes" style="background:var(--surface);color:var(--ink);border-color:var(--line)"><span class="ce" style="background:var(--surface2)">📝</span><span class="ct"><b>Toplantı notu al</b><span style="color:var(--soft)">Bugün şeften duyduklarını yaz</span></span><span class="chev">›</span></button>`;
+  }
+  if (M.stage === 'listen') {
+    return `<div class="quiz meet"><div class="qtop"><button class="qx" data-mquit>✕ Çık</button></div>
+      <div class="speaker">🧑‍💼</div>
+      <div class="mprog" id="mprog">Şef konuşuyor…</div>
+      <p class="hint" style="text-align:center">Yazı yok, sadece dinle. Anlamadıysan baştan dinleyebilirsin.</p>
+      <div class="row"><button class="btn ghost" data-mreplay>🔁 Baştan dinle</button><button class="btn" data-mquiz>Sorulara geç →</button></div></div>`;
+  }
+  if (M.stage === 'quiz') {
+    const s = M.items[M.i], q = BRIEF_Q[s.n], done = M.picked != null;
+    return `<div class="quiz"><div class="qtop"><button class="qx" data-mquit>✕ Çık</button><div class="bar"><i style="width:${100 * M.i / M.items.length}%"></i></div><span>${M.i + 1}/${M.items.length}</span></div>
+      <div class="gtag">🧑‍💼 Şef ne dedi?</div>
+      <div class="prompt">${esc(q[1])}</div>
+      <div class="opts">${M.opts.map((o, i) => `<button class="opt ${done ? (o === q[2] ? 'right' : i === M.picked ? 'wrong' : '') : ''}" data-mpick="${i}" ${done ? 'disabled' : ''}>${esc(o)}</button>`).join('')}</div>
+      ${done ? `<div class="fb ${M.opts[M.picked] === q[2] ? 'good' : 'bad'}">${M.opts[M.picked] === q[2] ? '✓ Doğru!' : '✗ Yanlış.'} Şef şunu dedi:</div>
+        <div class="answer"><p class="prompt de" lang="de">${esc(s.de)}</p><div>${esc(s.tr)}</div>${s.ok ? `<div class="ok"><b>Okunuşu:</b> ${esc(s.ok)}</div>` : ''}
+        <div class="acts"><button class="sbtn" data-say="${esc(s.de)}">🔊 Dinle</button><button class="sbtn" data-slow="${esc(s.de)}">🐢 Yavaş</button></div></div>
+        <button class="btn" data-mnext>${M.i + 1 < M.items.length ? 'Sonraki soru →' : 'Sonucu gör'}</button>` : ''}
+    </div>`;
+  }
+  return `<div class="quiz result"><div class="e">${M.right === M.items.length ? '🏆' : M.right >= M.items.length / 2 ? '👍' : '🎧'}</div>
+      <h3>${M.right} / ${M.items.length} doğru anladın</h3>
+      <p class="muted">${M.right === M.items.length ? 'Harika! Şefi tamamen anladın.' : 'Konuşmanın yazılı hâlini oku ve bir kez daha dinle.'}</p>
+      <div class="notes" style="text-align:left"><div style="font-weight:700">Şefin konuşması:</div>${M.items.map(s => `<div><b>${esc(s.de)}</b><span>${esc(s.tr)}</span></div>`).join('')}</div>
+      <button class="btn" data-mrestart>🔁 Aynı konuşmayı tekrar dinle</button>
+      <button class="btn ghost" data-mstart>Yeni toplantı</button>
+      <button class="btn ghost" data-mquit>Bitir</button></div>`;
+}
+
+// ---------- Toplantı notu ----------
+P.notes = P.notes || {};
+const fmtDate = k => { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long' }); };
+function noteText(k) { return `Toplantı notu (${fmtDate(k)}):\n${P.notes[k]}`; }
+function viewNotes() {
+  const t = today(), past = Object.keys(P.notes).filter(k => k !== t && P.notes[k].trim()).sort((a, b) => new Date(b.replace(/-/g, '/')) - new Date(a.replace(/-/g, '/'))).slice(0, 30);
+  return `<section class="devhead"><h2>📝 Toplantı notu</h2><p>Şeften duyduğun kelimeleri ya da anladığın kadarını yaz. Türkçe yazabilirsin. Sonra bana gönder, cümleye çevirip uygulamaya ekleyeyim.</p></section>
+    <div class="form" style="margin-top:12px">
+      <label>Bugün · ${esc(fmtDate(t))}<textarea id="note" rows="6" placeholder="Örn: Motor aus, Schlüssel… / şef yeni Bezirk dedi, pazartesi…">${esc(P.notes[t] || '')}</textarea></label>
+      <div class="row"><button type="button" class="btn ghost" data-ncopy="${t}">📋 Kopyala</button><button type="button" class="btn" data-nshare="${t}">📤 Gönder</button></div>
+      <p class="muted" style="margin:0">Yazdıkların kendiliğinden kaydedilir. "Gönder" ile Claude sohbetine paylaşabilirsin.</p>
+    </div>
+    ${past.length ? `<h2 class="sec">Önceki notlar</h2><div class="list">${past.map(k => `<article class="sc"><div class="hint" style="font-weight:700">${esc(fmtDate(k))}</div><p style="margin:6px 0 0;white-space:pre-wrap">${esc(P.notes[k])}</p>
+      <div class="acts"><button class="sbtn" data-ncopy="${k}">📋 Kopyala</button><button class="sbtn" data-nshare="${k}">📤 Gönder</button><button class="sbtn" data-ndel="${k}">🗑 Sil</button></div></article>`).join('')}</div>` : ''}`;
+}
+function copyText(t) {
+  const done = () => toast('Kopyalandı. Claude sohbetine yapıştırabilirsin.');
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, () => fallbackCopy(t, done)); else fallbackCopy(t, done);
+}
+function fallbackCopy(t, done) { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); done(); } catch (e) { toast('Kopyalanamadı.'); } a.remove(); }
+
 // ---------- Ana sayfa ----------
 let installEvt = null;
 addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; if (tab === 'home') render(); });
@@ -1065,6 +1245,8 @@ function viewHome() {
       ${ring(p)}
     </section>
     <button class="cta" data-tab="anki"><span class="ce">🧠</span><span class="ct"><b>Anki ile çalış</b><span>${due ? `${due} kart seni bekliyor` : 'Bugünlük tamam, harika! 🎉'}</span></span><span class="chev">›</span></button>
+    <section class="meetcard"><div class="mh"><span class="ce">📢</span><span><b>Sabah toplantısı</b><small>Şefin bilgilendirmesini anla</small></span></div>
+      <div class="row"><button class="btn" data-tab="meet">🎧 Dinle</button><button class="btn ghost" data-tab="notes">📝 Not al${P.notes[today()] && P.notes[today()].trim() ? ' ✓' : ''}</button></div></section>
     <button class="devcta" data-tab="device"><span class="ce">📟</span><span class="ct"><b>Cihaz kullanımı</b><span>Zebra el terminali · ${GUIDES.length} kayıt</span></span><span class="chev">›</span></button>
     ${install}
     <div class="tiles">${tiles}</div>
@@ -1075,16 +1257,16 @@ function viewHome() {
 }
 
 // ---------- Çizim ----------
-const SUB = { device: 'Zebra cihaz kılavuzu', home: 'İşte kullanılan Almanca', anki: 'Aralıklı tekrar', game: 'Paket Yarışı', list: 'İşte kullanılan cümleler', learn: 'Alıştırma', words: 'Kelime pratiği', pat: 'Soru kalıpları', add: 'Kendi cümlelerin' };
+const SUB = { meet: 'Sabah toplantısı', notes: 'Toplantı notu', device: 'Zebra cihaz kılavuzu', home: 'İşte kullanılan Almanca', anki: 'Aralıklı tekrar', game: 'Paket Yarışı', list: 'İşte kullanılan cümleler', learn: 'Alıştırma', words: 'Kelime pratiği', pat: 'Soru kalıpları', add: 'Kendi cümlelerin' };
 function render(keepFocus) {
   const app = $('#app');
   const f = keepFocus && document.activeElement && document.activeElement.id, pos = f && document.activeElement.selectionStart;
-  app.innerHTML = ({ home: viewHome, device: viewDevice, list: viewList, anki: viewAnki, game: viewGame, learn: viewLearn, words: viewWords, pat: viewPat, add: viewAdd }[tab] || viewHome)();
+  app.innerHTML = ({ home: viewHome, meet: viewMeet, notes: viewNotes, device: viewDevice, list: viewList, anki: viewAnki, game: viewGame, learn: viewLearn, words: viewWords, pat: viewPat, add: viewAdd }[tab] || viewHome)();
   document.querySelectorAll('.nav button').forEach(b => b.setAttribute('aria-current', b.dataset.tab === tab ? 'page' : 'false'));
   $('#sub').textContent = SUB[tab];
   if (f && $('#' + f)) { const el = $('#' + f); el.focus(); try { el.setSelectionRange(pos, pos); } catch (e) {} }
 }
-function go(t) { if (t !== 'game') { gStop(); G = null; } if (t !== 'anki') A = null; if (t !== 'device') devOpen = null; tab = t; if (t !== 'learn') Q = null; editId = null; render(); scrollTo(0, 0); try { history.replaceState(null, '', '#' + t); } catch (e) {} }
+function go(t) { if (t !== 'game') { gStop(); G = null; } if (t !== 'anki') A = null; if (t !== 'device') devOpen = null; if (t !== 'meet' && M) { M = null; synth && synth.cancel(); } tab = t; if (t !== 'learn') Q = null; editId = null; render(); scrollTo(0, 0); try { history.replaceState(null, '', '#' + t); } catch (e) {} }
 
 document.addEventListener('click', e => {
   const t = e.target.closest('button,[data-reveal]');
@@ -1098,6 +1280,17 @@ document.addEventListener('click', e => {
   if (d.filter) { filter = d.filter; return render(); }
   if (d.hide) { P.hide = P.hide === d.hide ? '' : d.hide; save(); return render(); }
   if (d.whide != null) { whide = !whide; return render(); }
+  if (d.mstart != null) return meetStart();
+  if (d.mreplay != null) return meetPlay();
+  if (d.mrestart != null) { M.stage = 'listen'; M.right = 0; render(); scrollTo(0, 0); return meetPlay(); }
+  if (d.mquiz != null) return meetQuiz();
+  if (d.mpick) { const s = M.items[M.i], q = BRIEF_Q[s.n], ok = M.opts[+d.mpick] === q[2]; M.picked = +d.mpick; if (ok) M.right++; else { P.box[s.id] = 0; if (P.srs[s.id]) P.srs[s.id].due = Math.min(P.srs[s.id].due, Date.now()); } P.seen[s.id] = 1; logDay(); save(); say(s.de); return render(); }
+  if (d.mnext != null) { M.i++; if (M.i >= M.items.length) M.stage = 'done'; else meetLoadQ(); render(); return scrollTo(0, 0); }
+  if (d.mquit != null) { synth && synth.cancel(); M = null; render(); return scrollTo(0, 0); }
+  if (d.mslow != null) { P.meet.slow = d.mslow === '1'; save(); return render(); }
+  if (d.ncopy) return copyText(noteText(d.ncopy));
+  if (d.nshare) { const t = noteText(d.nshare); if (navigator.share) navigator.share({ text: t }).catch(() => {}); else copyText(t); return; }
+  if (d.ndel) { if (confirm('Bu not silinsin mi?')) { delete P.notes[d.ndel]; save(); render(); } return; }
   if (d.dev) { devOpen = d.dev; render(); return scrollTo(0, 0); }
   if (d.devback != null) { devOpen = null; render(); return scrollTo(0, 0); }
   if (d.catgo) { filter = d.catgo; query = ''; return go('list'); }
@@ -1148,14 +1341,16 @@ document.addEventListener('click', e => {
   if (d.reset != null) { if (confirm('Tüm ilerleme (puanlar ve yıldızlar) sıfırlansın mı? Eklediğin cümleler kalır.')) { P.box = {}; P.seen = {}; P.star = {}; P.srs = {}; P.days = {}; P.best = 0; P.newDay = { d: '', n: 0 }; save(); toast('İlerleme sıfırlandı.'); render(); } }
 });
 document.addEventListener('input', e => {
+  if (e.target.id === 'note') { P.notes[today()] = e.target.value; save(); return; }
   if (e.target.id === 'q') { query = e.target.value; render(true); }
   if (e.target.id === 'wq') { wq = e.target.value; render(true); }
 });
 document.addEventListener('change', e => {
   if (e.target.id === 'set') learnSet = e.target.value;
+  if (e.target.id === 'mtopic') { P.meet.topic = e.target.value; save(); }
   if (e.target.id === 'aset') { P.anki.set = e.target.value; save(); render(); }
   if (e.target.id === 'impf' && e.target.files[0]) {
-    e.target.files[0].text().then(t => { const o = JSON.parse(t); if (!o || !Array.isArray(o.mine)) throw 0; P = Object.assign({ mine: [], star: {}, box: {}, seen: {}, hide: '', srs: {}, days: {}, best: 0, newDay: { d: '', n: 0 }, anki: { dir: 'tr', perDay: 10, set: 'all' }, game: { dir: 'mix', speed: 12 } }, o); save(); toast('Yedek yüklendi.'); render(); })
+    e.target.files[0].text().then(t => { const o = JSON.parse(t); if (!o || !Array.isArray(o.mine)) throw 0; P = Object.assign({ mine: [], star: {}, box: {}, seen: {}, hide: '', srs: {}, days: {}, best: 0, newDay: { d: '', n: 0 }, anki: { dir: 'tr', perDay: 10, set: 'all' }, game: { dir: 'mix', speed: 12 }, notes: {}, meet: { topic: 'mix', slow: false } }, o); save(); toast('Yedek yüklendi.'); render(); })
       .catch(() => toast('Bu dosya okunamadı.'));
   }
 });
