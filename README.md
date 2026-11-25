@@ -1,1 +1,22 @@
-# dhl-almanca
+# DHL Almancası
+
+Paket dağıtımında müşteri ve iş arkadaşlarıyla konuşmak için Almanca cümleler. Satzheft'ten bağımsız, ayrı bir uygulamadır.
+
+**Adres:** https://ethemguenes-bit.github.io/dhl-almanca/
+
+Android'de Chrome ile açıp menüden **Uygulamayı yükle** seçin; ana ekrana kendi ikonuyla gelir ve ilk açılıştan sonra internetsiz çalışır.
+
+## İçerik
+
+- **Ana sayfa:** ilerleme halkası, günlük seri, Anki kısayolu, cihaz kılavuzu, bölümler, günün cümlesi, telefona yükleme düğmesi
+- **Cümleler:** 135 numaralı cümle; her birinde Türkçe, Almanca, Türkçe okunuş, kelime açıklamaları ve varsa alternatif; arama, yıldızlama, gizleyip kendini sınama, normal ve yavaş seslendirme
+- **Anki:** aralıklı tekrar (Tekrar / Zor / İyi / Kolay), günde yeni kart sınırı, yön ve deste seçimi
+- **Oyun (Paket Yarışı):** Almanca→Türkçe ve Türkçe→Almanca sorular, 3 can, süre, seri çarpanı, rekor
+- **Cihaz kullanımı:** Zebra el terminali kılavuzu, numaralı kayıtlar (001: Müşteri evde yok – Benachrichtigung)
+- **Alıştırmalar:** Kartlar, Doğruyu seç, Dinle ve anla, Cümle kur
+- **Kelimeler**, **Kalıplar**, **Ekle** (kendi cümlelerin, toplu ekleme, yedek)
+
+## Düzenleme
+
+Her şey `index.html` içindedir: cümleler `BASE`, kelimeler `WORDS`, cihaz kayıtları `GUIDES` listesinde.
+Dosyalar değişince `sw.js` içindeki `VERSION` değerini artırın; telefonlar yeni sürümü bir sonraki açılışta alır.
