@@ -1,0 +1,18 @@
+{
+  "id": "./",
+  "name": "DHL Almancası – işte kullanılan cümleler",
+  "short_name": "DHL Almanca",
+  "description": "Paket dağıtımında müşteri ve iş arkadaşlarıyla konuşmak için Almanca cümleler, okunuşlar ve alıştırmalar",
+  "lang": "tr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fff8e1",
+  "theme_color": "#ffcc00",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
