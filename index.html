@@ -339,6 +339,9 @@ button.logo{border:0;cursor:pointer}
 .btr.big{font-size:17px;font-weight:700;margin:4px 0}
 .bub .acts{margin-top:6px}
 .bub .sbtn{padding:4px 9px}
+/* Rol yaparken düğme alttaki menünün üstünde hep görünür kalsın */
+.dspace{height:30vh}
+.dctrl{position:sticky;bottom:calc(72px + env(safe-area-inset-bottom));z-index:6;padding:14px 0 10px;background:linear-gradient(to bottom,transparent,var(--bg) 35%)}
 </style>
 </head>
 <body>
@@ -1312,13 +1315,26 @@ function viewDialog() {
       <button class="btn" data-dme="${next[0]}">${esc(next[1])} →</button><button class="btn ghost" data-drestart>Aynı rolü tekrarla</button></div>`;
   } else if (mine(D.i) && !D.shown) {
     chat += bubble(g, D.i, { hideDe: true });
-    ctrl = `<button class="btn" data-dshow>Söyledim, doğrusunu göster</button>`;
+    ctrl = `<div class="dctrl"><button class="btn" data-dshow>Söyledim, doğrusunu göster</button></div>`;
   } else {
     chat += bubble(g, D.i);
-    ctrl = `<button class="btn" data-dnext>${D.i + 1 < g.lines.length ? 'Devam →' : 'Bitir'}</button>`;
+    ctrl = `<div class="dctrl"><button class="btn" data-dnext>${D.i + 1 < g.lines.length ? 'Devam →' : 'Bitir'}</button></div>`;
   }
   return `${head}${pick}<p class="hint" style="margin:10px 0 0">${D.me === 'both' ? 'Her repliği sen söyle. Ayağa kalk, gerçekten oynuyormuş gibi!' : `Sen <b>${esc(meName)}</b>sın. Karşı tarafı dinle, kendi repliğini Türkçesine bakarak sesli söyle.`}</p>
-    <div class="chat">${chat}</div>${ctrl}`;
+    <div class="chat">${chat}</div>${ctrl}<div class="dspace"></div>`;
+}
+// Son balon, alttaki sabit düğmenin hemen üstünde görünsün (Masaüstü sitesi yakınlaştırmasında da)
+function dlgReveal() {
+  requestAnimationFrame(() => {
+    const r = document.querySelector('.result');
+    if (r) { r.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
+    const last = document.querySelector('.chat .bub:last-child'), ctrl = document.querySelector('.dctrl .btn'), head = document.querySelector('.head');
+    if (!last || !ctrl) return;
+    const lb = last.getBoundingClientRect(), cb = ctrl.getBoundingClientRect(), top = head ? head.getBoundingClientRect().bottom : 0;
+    let dy = lb.bottom - (cb.top - 12);
+    if (lb.top - dy < top + 8) dy = lb.top - top - 8; // çok uzun balonda başı görünsün
+    if (Math.abs(dy) > 2) scrollBy({ top: dy, behavior: 'smooth' });
+  });
 }
 function dlgStep() {
   const g = DIALOGS.find(x => x.no === D.no);
@@ -1403,14 +1419,14 @@ document.addEventListener('click', e => {
   if (d.whide != null) { whide = !whide; return render(); }
   if (d.dlg) { D = { no: d.dlg, mode: 'read', me: 'b', i: 0, shown: false, hideTr: false }; render(); return scrollTo(0, 0); }
   if (d.dlgback != null) { synth && synth.cancel(); D = null; render(); return scrollTo(0, 0); }
-  if (d.dmode) { synth && synth.cancel(); D.mode = d.dmode; D.i = 0; D.shown = false; render(); scrollTo(0, 0); if (D.mode === 'role') dlgStep(); return; }
+  if (d.dmode) { synth && synth.cancel(); D.mode = d.dmode; D.i = 0; D.shown = false; render(); scrollTo(0, 0); if (D.mode === 'role') { dlgStep(); dlgReveal(); } return; }
   if (d.dplay != null) return dlgPlayAll(DIALOGS.find(x => x.no === D.no));
   if (d.dhidetr != null) { D.hideTr = !D.hideTr; return render(); }
   if (d.dsay) { const g = DIALOGS.find(x => x.no === D.no), [r, de] = g.lines[+d.dsay]; synth && synth.cancel(); return sayAs(de, g.roles[r].pitch); }
-  if (d.dme) { synth && synth.cancel(); D.me = d.dme; D.mode = 'role'; D.i = 0; D.shown = false; render(); scrollTo(0, 0); return dlgStep(); }
-  if (d.drestart != null) { D.i = 0; D.shown = false; render(); scrollTo(0, 0); return dlgStep(); }
-  if (d.dshow != null) { const g = DIALOGS.find(x => x.no === D.no), [r, de] = g.lines[D.i]; D.shown = true; logDay(); save(); render(); synth && synth.cancel(); sayAs(de, g.roles[r].pitch); const b = document.querySelector('.chat .bub:last-child'); if (b) b.scrollIntoView({ block: 'nearest' }); return; }
-  if (d.dnext != null) { D.i++; D.shown = false; render(); dlgStep(); const b = document.querySelector('.chat .bub:last-child') || document.querySelector('.result'); if (b) b.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
+  if (d.dme) { synth && synth.cancel(); D.me = d.dme; D.mode = 'role'; D.i = 0; D.shown = false; render(); scrollTo(0, 0); dlgStep(); return dlgReveal(); }
+  if (d.drestart != null) { D.i = 0; D.shown = false; render(); scrollTo(0, 0); dlgStep(); return dlgReveal(); }
+  if (d.dshow != null) { const g = DIALOGS.find(x => x.no === D.no), [r, de] = g.lines[D.i]; D.shown = true; logDay(); save(); render(); synth && synth.cancel(); sayAs(de, g.roles[r].pitch); dlgReveal(); return; }
+  if (d.dnext != null) { D.i++; D.shown = false; render(); dlgStep(); dlgReveal(); return; }
   if (d.mstart != null) return meetStart();
   if (d.mreplay != null) return meetPlay();
   if (d.mrestart != null) { M.stage = 'listen'; M.right = 0; render(); scrollTo(0, 0); return meetPlay(); }
