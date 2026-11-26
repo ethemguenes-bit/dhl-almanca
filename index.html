@@ -317,6 +317,28 @@ button.logo{border:0;cursor:pointer}
 @keyframes talk{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 @media (prefers-reduced-motion: reduce){.speaker{animation:none}}
 .mprog{font-weight:700;font-size:17px}
+
+/* Diyaloglar */
+.dlgcta{width:100%;display:flex;align-items:center;gap:12px;text-align:left;border:0;background:linear-gradient(135deg,#5b2bb5,#7c3aed);color:#fff;border-radius:18px;padding:14px;box-shadow:var(--shadow);margin-top:12px}
+.dlgcta .ce{font-size:26px;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;flex:none;background:rgba(255,255,255,.2)}
+.dlgcta .ct{flex:1;min-width:0;display:flex;flex-direction:column}
+.dlgcta b{font-size:17px}.dlgcta .ct span{opacity:.85;font-size:13.5px}
+.dlghero{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,#5b2bb5,#7c3aed);color:#fff;border-radius:22px;padding:18px;box-shadow:var(--shadow)}
+.dlghero .e{font-size:40px;width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,.2);display:grid;place-items:center;flex:none}
+.dlghero h2{margin:0;font-size:22px}.dlghero p{margin:4px 0 0;font-size:14px;opacity:.85}
+.roles{display:flex;flex-direction:column;gap:2px;margin-top:6px;font-size:14px;color:var(--soft)}
+.roles b{color:var(--ink)}
+.chat{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+.bub{max-width:88%;border-radius:18px;padding:10px 12px;border:1px solid var(--line);box-shadow:var(--shadow);transition:box-shadow .2s,transform .2s}
+.bub.them{align-self:flex-start;background:var(--surface);border-bottom-left-radius:6px}
+.bub.me{align-self:flex-end;background:var(--gold-bg);border-color:color-mix(in srgb,var(--gold) 35%,transparent);border-bottom-right-radius:6px}
+.bub.playing{box-shadow:0 0 0 3px var(--accent);transform:scale(1.01)}
+.bub .who{font-size:12.5px;font-weight:800;color:var(--soft);margin-bottom:2px}
+.bub .de{font-size:19px;margin:2px 0 4px}
+.btr{font-size:14.5px}
+.btr.big{font-size:17px;font-weight:700;margin:4px 0}
+.bub .acts{margin-top:6px}
+.bub .sbtn{padding:4px 9px}
 </style>
 </head>
 <body>
@@ -1207,6 +1229,104 @@ function copyText(t) {
 }
 function fallbackCopy(t, done) { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); done(); } catch (e) { toast('Kopyalanamadı.'); } a.remove(); }
 
+// ---------- Diyaloglar ----------
+// Her sahne: no, başlık, yer/zaman, roller (a: karşı taraf, b: sen), replikler [rol, Almanca, Türkçe, okunuş], kilit ifadeler, ezber taktiği.
+const DIALOGS = [
+  {
+    no: '01', icon: '🏭', title: 'Depoda sabah', scene: 'DHL Depo, sabah 7:00',
+    roles: { a: { name: 'Herr Becker', role: 'Depo şefi (Chef)', e: '🧑‍💼', pitch: 0.8 }, b: { name: 'Murat', role: 'Sen · DHL kuryesi (Paketzusteller)', e: '🧑', pitch: 1.1 } },
+    lines: [
+      ['a', 'Guten Morgen, Murat! Du bist heute spät dran.', 'Günaydın Murat! Bugün geç kaldın.', 'Guuten morgın, Murat! Du bist hoyte şpeet dran.'],
+      ['b', 'Guten Morgen, Herr Becker. Entschuldigung, die S-Bahn hatte zwanzig Minuten Verspätung.', 'Günaydın Herr Becker. Kusura bakmayın, S-Bahn yirmi dakika rötar yaptı.', 'Guuten morgın, hea Beka. Entşuldigung, dii es-baan hate tsvantsih minuutın ferşpeetung.'],
+      ['a', 'Schon gut. Aber heute haben wir viel zu tun. Deine Tour hat 180 Pakete.', 'Tamam, önemli değil. Ama bugün çok işimiz var. Senin turunda 180 paket var.', 'Şoon guut. Aaba hoyte haabın viia fiil tsu tuun. Dayne tuua hat hundertahtsih pakete.'],
+      ['b', '180? Das ist viel! Normalerweise habe ich nur 140.', '180 mi? Bu çok! Normalde sadece 140 tane oluyor.', 'Hundertahtsih? Das ist fiil! Normaalavayze habe ih nua hundertfiirtsih.'],
+      ['a', 'Ich weiß. Ein Kollege ist krank. Kannst du heute eine Stunde länger arbeiten?', 'Biliyorum. Bir arkadaş hasta. Bugün bir saat fazla çalışabilir misin?', 'İh vays. Ayn kolleege ist krank. Kanst du hoyte ayne ştunde lenga arbaytın?'],
+      ['b', 'Ja, das geht. Aber darf ich am Freitag früher gehen? Ich habe einen Termin beim Amt.', 'Evet, olur. Ama cuma günü erken çıkabilir miyim? Resmi dairede randevum var.', 'Ya, das geet. Aaba darf ih am fraytaak früüa geeyın? İh habe aynen termiin baym amt.'],
+      ['a', 'Kein Problem. Die Überstunde kannst du am Freitag abbauen.', 'Sorun değil. Fazla mesaiyi cuma günü kullanabilirsin.', 'Kayn probleem. Dii üüberştunde kanst du am fraytaak apbauın.'],
+      ['b', 'Super, danke! Ach, noch etwas: Der Scanner im Transporter funktioniert nicht richtig.', 'Süper, teşekkürler! Bir şey daha: Arabadaki tarayıcı düzgün çalışmıyor.', 'Zuupa, danke! Ah, noh etvas: Dea skena im transporta funktsiyoniirt niht rihtih.'],
+      ['a', 'Dann nimm einen neuen aus dem Büro. Und fahr vorsichtig!', 'O zaman ofisten yenisini al. Ve dikkatli sür!', 'Dan nim aynen noyen aus deem büroo. Unt faar foazihtih!'],
+      ['b', 'Mach ich. Bis heute Abend!', 'Tamamdır. Akşam görüşürüz!', 'Mah ih. Bis hoyte aabınt!'],
+    ],
+    keys: [['spät dran sein', 'geç kalmak'], ['Verspätung haben', 'rötar yapmak'], ['Überstunden abbauen', 'fazla mesaiyi izin olarak kullanmak'], ['Darf ich …?', '… -ebilir miyim? (izin isteme)'], ['Das geht.', 'Olur.']],
+  },
+];
+const DLG_STEPS = [
+  ['1', 'Önce sadece <b>senin rolünün</b> repliklerini ezberle.'],
+  ['2', '<b>Rol yap</b>: karşı tarafın repliğini dinle, bakmadan cevabını sesli söyle.'],
+  ['3', 'Rahatladığında <b>rolleri değiştir</b>.'],
+  ['4', 'Son aşama: <b>iki rolü de</b> tek başına, ayağa kalkıp gerçekten oynuyormuş gibi canlandır. Hareketle söylenen cümleler akılda daha iyi kalır.'],
+];
+let D = null; // { no, mode: 'read'|'role', me: 'a'|'b'|'both', i, shown, hideTr }
+function sayAs(text, pitch, onstart, onend) {
+  if (!synth) { toast('Bu tarayıcı seslendirmeyi desteklemiyor.'); return; }
+  const u = new SpeechSynthesisUtterance(text); u.lang = 'de-DE'; if (deVoice) u.voice = deVoice; u.rate = 0.9; u.pitch = pitch || 1;
+  if (onstart) u.onstart = onstart; if (onend) u.onend = onend; synth.speak(u);
+}
+function dlgPlayAll(g) {
+  synth && synth.cancel();
+  g.lines.forEach(([r, de], k) => sayAs(de, g.roles[r].pitch,
+    () => { document.querySelectorAll('.bub.playing').forEach(x => x.classList.remove('playing')); const el = document.querySelector(`.bub[data-k="${k}"]`); if (el) { el.classList.add('playing'); el.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } },
+    () => { if (k === g.lines.length - 1) document.querySelectorAll('.bub.playing').forEach(x => x.classList.remove('playing')); }));
+}
+function bubble(g, k, opts = {}) {
+  const [r, de, tr, ok] = g.lines[k], ro = g.roles[r];
+  const hideDe = opts.hideDe, side = r === 'b' ? 'me' : 'them';
+  return `<div class="bub ${side}" data-k="${k}"><div class="who">${ro.e} ${esc(ro.name)}</div>
+    ${hideDe ? `<div class="btr big">🇹🇷 ${esc(tr)}</div><div class="hint">Almancasını sesli söyle…</div>`
+      : `<p class="de" lang="de">${esc(de)}</p>${D && D.hideTr ? '' : `<div class="btr">🇹🇷 ${esc(tr)}</div>`}${ok ? `<div class="ok"><b>Okunuşu:</b> ${esc(ok)}</div>` : ''}
+        <div class="acts"><button class="sbtn" data-dsay="${k}">🔊</button><button class="sbtn" data-slow="${esc(de)}">🐢</button></div>`}
+  </div>`;
+}
+function viewDialog() {
+  const g = D && DIALOGS.find(x => x.no === D.no);
+  if (!g) {
+    return `<section class="dlghero"><div class="e">🎭</div><div><h2>Diyaloglar</h2><p>İşte geçen gerçek sahneler. Oku, dinle, sonra rolünü oyna.</p></div></section>
+      <h2 class="sec">Sahneler (${DIALOGS.length})</h2>
+      <div class="cats">${DIALOGS.map(x => `<button class="crow" data-dlg="${x.no}"><span class="ce">${x.icon}</span><span class="ct"><span class="dno">Sahne ${x.no}</span><b>${esc(x.title)}</b><span>${esc(x.scene)} · ${x.roles.b.e} ${esc(x.roles.b.name)} & ${x.roles.a.e} ${esc(x.roles.a.name)}</span></span><span class="chev">›</span></button>`).join('')}</div>
+      <p class="muted" style="margin-top:14px">Yeni sahneler eklendikçe bu listede görünecek.</p>`;
+  }
+  const head = `<button class="back" data-dlgback>‹ Tüm sahneler</button>
+    <section class="devhead"><span class="dno">Sahne ${g.no} · ${esc(g.scene)}</span><h2>${g.icon} ${esc(g.title)}</h2>
+      <div class="roles">${['b', 'a'].map(r => `<span>${g.roles[r].e} <b>${esc(g.roles[r].name)}</b> · ${esc(g.roles[r].role)}</span>`).join('')}</div></section>
+    <div class="seg" style="margin-top:12px"><button data-dmode="read" aria-pressed="${D.mode === 'read'}">📖 Oku ve dinle</button><button data-dmode="role" aria-pressed="${D.mode === 'role'}">🎭 Rol yap</button></div>`;
+  if (D.mode === 'read') {
+    return `${head}
+      <div class="row" style="margin-top:12px"><button class="btn" data-dplay>▶ Tümünü dinle</button><button class="btn ghost" data-dhidetr aria-pressed="${!!D.hideTr}">${D.hideTr ? 'Türkçeyi göster' : 'Türkçeyi gizle'}</button></div>
+      <div class="chat">${g.lines.map((_, k) => bubble(g, k)).join('')}</div>
+      <h2 class="sec">📌 Kilit ifadeler</h2>
+      <div class="wl">${g.keys.map(([d, t]) => `<div class="wi"><div class="t"><div class="d" lang="de">${esc(d)}</div><div class="m">${esc(t)}</div></div><button class="ib" data-say="${esc(d)}" aria-label="Dinle">🔊</button></div>`).join('')}</div>
+      <h2 class="sec">🧠 Ezber taktiği</h2>
+      <ol class="flow">${DLG_STEPS.map(([n, t]) => `<li><span class="sn">${n}</span><span>${t}</span></li>`).join('')}</ol>
+      <button class="btn" data-dmode="role">🎭 Şimdi rol yap →</button>`;
+  }
+  // Rol yap
+  const meName = D.me === 'both' ? 'İki rol de' : g.roles[D.me].name;
+  const pick = `<div class="form" style="margin-top:12px"><label>Sen kimsin?<div class="seg">${[['b', g.roles.b.e + ' ' + g.roles.b.name], ['a', g.roles.a.e + ' ' + g.roles.a.name], ['both', '🎭 İkisi de']].map(([k, n]) => `<button type="button" data-dme="${k}" aria-pressed="${D.me === k}">${esc(n)}</button>`).join('')}</div></label></div>`;
+  const mine = k => D.me === 'both' || g.lines[k][0] === D.me;
+  let chat = '';
+  for (let k = 0; k < D.i; k++) chat += bubble(g, k);
+  let ctrl;
+  if (D.i >= g.lines.length) {
+    const next = D.me === 'b' ? ['a', `Rolleri değiştir: ${g.roles.a.name} ol`] : D.me === 'a' ? ['both', 'Son aşama: iki rolü de oyna'] : ['b', 'Baştan: yine ' + g.roles.b.name + ' ol'];
+    ctrl = `<div class="quiz result" style="margin-top:12px"><div class="e">👏</div><h3>Sahne bitti!</h3><p class="muted">${esc(meName)} rolünü oynadın.</p>
+      <button class="btn" data-dme="${next[0]}">${esc(next[1])} →</button><button class="btn ghost" data-drestart>Aynı rolü tekrarla</button></div>`;
+  } else if (mine(D.i) && !D.shown) {
+    chat += bubble(g, D.i, { hideDe: true });
+    ctrl = `<button class="btn" data-dshow>Söyledim, doğrusunu göster</button>`;
+  } else {
+    chat += bubble(g, D.i);
+    ctrl = `<button class="btn" data-dnext>${D.i + 1 < g.lines.length ? 'Devam →' : 'Bitir'}</button>`;
+  }
+  return `${head}${pick}<p class="hint" style="margin:10px 0 0">${D.me === 'both' ? 'Her repliği sen söyle. Ayağa kalk, gerçekten oynuyormuş gibi!' : `Sen <b>${esc(meName)}</b>sın. Karşı tarafı dinle, kendi repliğini Türkçesine bakarak sesli söyle.`}</p>
+    <div class="chat">${chat}</div>${ctrl}`;
+}
+function dlgStep() {
+  const g = DIALOGS.find(x => x.no === D.no);
+  if (D.i >= g.lines.length) return;
+  const mineNow = D.me === 'both' || g.lines[D.i][0] === D.me;
+  if (!mineNow) { const [r, de] = g.lines[D.i]; synth && synth.cancel(); sayAs(de, g.roles[r].pitch); }
+}
+
 // ---------- Ana sayfa ----------
 let installEvt = null;
 addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; if (tab === 'home') render(); });
@@ -1247,6 +1367,7 @@ function viewHome() {
     <button class="cta" data-tab="anki"><span class="ce">🧠</span><span class="ct"><b>Anki ile çalış</b><span>${due ? `${due} kart seni bekliyor` : 'Bugünlük tamam, harika! 🎉'}</span></span><span class="chev">›</span></button>
     <section class="meetcard"><div class="mh"><span class="ce">📢</span><span><b>Sabah toplantısı</b><small>Şefin bilgilendirmesini anla</small></span></div>
       <div class="row"><button class="btn" data-tab="meet">🎧 Dinle</button><button class="btn ghost" data-tab="notes">📝 Not al${P.notes[today()] && P.notes[today()].trim() ? ' ✓' : ''}</button></div></section>
+    <button class="dlgcta" data-tab="dialog"><span class="ce">🎭</span><span class="ct"><b>Diyaloglar</b><span>Gerçek sahneler · rol yap · ${DIALOGS.length} sahne</span></span><span class="chev">›</span></button>
     <button class="devcta" data-tab="device"><span class="ce">📟</span><span class="ct"><b>Cihaz kullanımı</b><span>Zebra el terminali · ${GUIDES.length} kayıt</span></span><span class="chev">›</span></button>
     ${install}
     <div class="tiles">${tiles}</div>
@@ -1257,16 +1378,16 @@ function viewHome() {
 }
 
 // ---------- Çizim ----------
-const SUB = { meet: 'Sabah toplantısı', notes: 'Toplantı notu', device: 'Zebra cihaz kılavuzu', home: 'İşte kullanılan Almanca', anki: 'Aralıklı tekrar', game: 'Paket Yarışı', list: 'İşte kullanılan cümleler', learn: 'Alıştırma', words: 'Kelime pratiği', pat: 'Soru kalıpları', add: 'Kendi cümlelerin' };
+const SUB = { dialog: 'Diyaloglar', meet: 'Sabah toplantısı', notes: 'Toplantı notu', device: 'Zebra cihaz kılavuzu', home: 'İşte kullanılan Almanca', anki: 'Aralıklı tekrar', game: 'Paket Yarışı', list: 'İşte kullanılan cümleler', learn: 'Alıştırma', words: 'Kelime pratiği', pat: 'Soru kalıpları', add: 'Kendi cümlelerin' };
 function render(keepFocus) {
   const app = $('#app');
   const f = keepFocus && document.activeElement && document.activeElement.id, pos = f && document.activeElement.selectionStart;
-  app.innerHTML = ({ home: viewHome, meet: viewMeet, notes: viewNotes, device: viewDevice, list: viewList, anki: viewAnki, game: viewGame, learn: viewLearn, words: viewWords, pat: viewPat, add: viewAdd }[tab] || viewHome)();
+  app.innerHTML = ({ home: viewHome, dialog: viewDialog, meet: viewMeet, notes: viewNotes, device: viewDevice, list: viewList, anki: viewAnki, game: viewGame, learn: viewLearn, words: viewWords, pat: viewPat, add: viewAdd }[tab] || viewHome)();
   document.querySelectorAll('.nav button').forEach(b => b.setAttribute('aria-current', b.dataset.tab === tab ? 'page' : 'false'));
   $('#sub').textContent = SUB[tab];
   if (f && $('#' + f)) { const el = $('#' + f); el.focus(); try { el.setSelectionRange(pos, pos); } catch (e) {} }
 }
-function go(t) { if (t !== 'game') { gStop(); G = null; } if (t !== 'anki') A = null; if (t !== 'device') devOpen = null; if (t !== 'meet' && M) { M = null; synth && synth.cancel(); } tab = t; if (t !== 'learn') Q = null; editId = null; render(); scrollTo(0, 0); try { history.replaceState(null, '', '#' + t); } catch (e) {} }
+function go(t) { if (t !== 'game') { gStop(); G = null; } if (t !== 'anki') A = null; if (t !== 'device') devOpen = null; if (t !== 'meet' && M) { M = null; synth && synth.cancel(); } if (t !== 'dialog' && D) { D = null; synth && synth.cancel(); } tab = t; if (t !== 'learn') Q = null; editId = null; render(); scrollTo(0, 0); try { history.replaceState(null, '', '#' + t); } catch (e) {} }
 
 document.addEventListener('click', e => {
   const t = e.target.closest('button,[data-reveal]');
@@ -1280,6 +1401,16 @@ document.addEventListener('click', e => {
   if (d.filter) { filter = d.filter; return render(); }
   if (d.hide) { P.hide = P.hide === d.hide ? '' : d.hide; save(); return render(); }
   if (d.whide != null) { whide = !whide; return render(); }
+  if (d.dlg) { D = { no: d.dlg, mode: 'read', me: 'b', i: 0, shown: false, hideTr: false }; render(); return scrollTo(0, 0); }
+  if (d.dlgback != null) { synth && synth.cancel(); D = null; render(); return scrollTo(0, 0); }
+  if (d.dmode) { synth && synth.cancel(); D.mode = d.dmode; D.i = 0; D.shown = false; render(); scrollTo(0, 0); if (D.mode === 'role') dlgStep(); return; }
+  if (d.dplay != null) return dlgPlayAll(DIALOGS.find(x => x.no === D.no));
+  if (d.dhidetr != null) { D.hideTr = !D.hideTr; return render(); }
+  if (d.dsay) { const g = DIALOGS.find(x => x.no === D.no), [r, de] = g.lines[+d.dsay]; synth && synth.cancel(); return sayAs(de, g.roles[r].pitch); }
+  if (d.dme) { synth && synth.cancel(); D.me = d.dme; D.mode = 'role'; D.i = 0; D.shown = false; render(); scrollTo(0, 0); return dlgStep(); }
+  if (d.drestart != null) { D.i = 0; D.shown = false; render(); scrollTo(0, 0); return dlgStep(); }
+  if (d.dshow != null) { const g = DIALOGS.find(x => x.no === D.no), [r, de] = g.lines[D.i]; D.shown = true; logDay(); save(); render(); synth && synth.cancel(); sayAs(de, g.roles[r].pitch); const b = document.querySelector('.chat .bub:last-child'); if (b) b.scrollIntoView({ block: 'nearest' }); return; }
+  if (d.dnext != null) { D.i++; D.shown = false; render(); dlgStep(); const b = document.querySelector('.chat .bub:last-child') || document.querySelector('.result'); if (b) b.scrollIntoView({ block: 'center', behavior: 'smooth' }); return; }
   if (d.mstart != null) return meetStart();
   if (d.mreplay != null) return meetPlay();
   if (d.mrestart != null) { M.stage = 'listen'; M.right = 0; render(); scrollTo(0, 0); return meetPlay(); }
